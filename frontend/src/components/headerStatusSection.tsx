@@ -1,20 +1,34 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
+import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
+import Typography  from '@mui/material/Typography';
 
-export default function BasicTextFields() {
+export default function HeaderStatusSection() {
   return (
     <Box
-      component="form"
-      sx={{
-        '& > :not(style)': { m: 1, width: '25ch' },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-      <TextField id="filled-basic" label="Filled" variant="filled" />
-      <TextField id="standard-basic" label="Standard" variant="standard" />
+     component="div"
+     sx={{
+      width: "100%",
+      height:' auto',
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center"
+
+    }}>
+      <Box 
+        component="div"
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          textAlign: "center",
+          bgcolor: "#00c853",
+          padding: "10px",
+          borderRadius: "100%"
+        }}
+        >
+        <PlaceOutlinedIcon fontSize='large' sx={{ color: "#fff" }}/>
+      </Box>
+      <Typography variant='subtitle1' sx={{ color: "#8789af" }}>Endereço</Typography>
     </Box>
   );
 }
