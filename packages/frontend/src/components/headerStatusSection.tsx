@@ -12,7 +12,8 @@ export default function HeaderStatusSection() {
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
-      alignItems: "center"
+      alignItems: "center",
+      py: 3
 
     }}>
       <Box 
@@ -28,7 +29,7 @@ export default function HeaderStatusSection() {
         >
         <PlaceOutlinedIcon fontSize='large' sx={{ color: "#fff" }}/>
       </Box>
-      <Typography variant='subtitle1' sx={{ color: "#8789af" }}>Endereço</Typography>
+      <Typography variant='subtitle1' fontSize={24} sx={{ color: "#8789af" }}>Address</Typography>
     </Box>
   );
 }

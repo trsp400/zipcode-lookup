@@ -12,7 +12,7 @@ export default function Layout({ children }: LayoutProps) {
     <Box sx={{ bgcolor: "#04044c" }}>
       <CssBaseline />
       <Container maxWidth="md" >
-        <Box sx={{ height: '100vh' }}>
+        <Box height={{ xs: "100%", md: '100vh' }} pb={{ xs: 5, md: 0 }}>
           {children}
         </Box>
       </Container>
