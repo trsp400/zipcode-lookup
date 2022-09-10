@@ -4,14 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon",
-    "start": "npm run build && node build/index.js"
+    "start": "npm run build && node build/index.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "Thiago Robles",
   "license": "ISC",
   "dependencies": {
+    "@graphql-tools/schema": "^9.0.4",
     "apollo-server": "^3.10.2",
     "axios": "^0.27.2",
     "class-validator": "^0.13.2",
@@ -21,8 +22,10 @@
     "type-graphql": "^1.1.1"
   },
   "devDependencies": {
+    "@types/jest": "^29.0.0",
     "@types/node": "^18.7.16",
     "nodemon": "^2.0.19",
+    "ts-jest": "^29.0.0",
     "typescript": "^4.8.2"
   }
 }
