@@ -1,10 +1,21 @@
+import "reflect-metadata";
 import { ApolloServer } from "apollo-server";
+import path from "path";
 
-import { typeDefs } from "./schema/typeDefs";
-import { resolvers } from "./schema/resolvers";
+import { buildSchema } from "type-graphql";
+import { AddressResolver } from "./resolvers/AddressResolver";
 
-const server = new ApolloServer({ typeDefs, resolvers });
+async function main() {
+  const schema = await buildSchema({
+    resolvers: [AddressResolver],
+    emitSchemaFile: path.resolve(__dirname, 'schema.gql')
+  })
 
-server.listen().then(({url}) => {
-  console.log("API runnning on: " + url)
-})
+  const server = new ApolloServer({ schema });
+  
+  server.listen().then(({url}) => {
+    console.log("API runnning on: " + url)
+  })
+}
+
+main()
