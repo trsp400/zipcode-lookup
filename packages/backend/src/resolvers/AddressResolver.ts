@@ -5,7 +5,6 @@ import { FindAddressService } from '../services/FindAddressService';
 
 @Resolver()
 export class AddressResolver {
-
   @Query(() => Address)
   async findAddress(
     @Arg('zipcode') zipcode: string,

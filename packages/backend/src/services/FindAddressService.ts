@@ -7,6 +7,7 @@ import { Address } from "../models/Address";
 @injectable()
 export class FindAddressService {
   async execute({country, zipcode}: AddressRequest) {
+    
 
     try {
       const {data} = await axios.get(`http://api.zippopotam.us/${country}/${zipcode}`)
@@ -23,7 +24,8 @@ export class FindAddressService {
       }  
       
       return address;
-    } catch (error) {
+    } catch (error: any) {
+      console.log(error?.message)
       throw new Error("Request error")
     }
   }
