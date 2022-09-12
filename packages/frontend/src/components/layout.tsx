@@ -9,10 +9,10 @@ type LayoutProps = {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <Box sx={{ bgcolor: "#04044c" }}>
+    <Box sx={{ bgcolor: "#001e3c" }}>
       <CssBaseline />
-      <Container maxWidth="lg" >
-        <Box sx={{ height: '100vh' }}>
+      <Container maxWidth="md" >
+        <Box height={{ xs: "100%", md: "100vh"}} minHeight="100vh" pb={{ xs: 5, md: 0 }}>
           {children}
         </Box>
       </Container>
