@@ -1,4 +1,4 @@
-# This project is a monorepo and was set up using lerna package to bootstrap and run all packages (frontend and backend)
+# This project is a monorepo and was set up using lerna to bootstrap and run all packages (frontend and backend)
 
 ## First of all, we need to bootstrap all the dependencies of all packages, so to make it, just run:
 ```
@@ -20,7 +20,18 @@ npx lerna run dev
 npx nx graph
 ```
 
-## After the project is running, you can access thie package links on:
+## After the project is running, you can access the package links on:
 
 - frontend: ```http://localhost:3000```
 - backend: ```http://localhost:4000```
+
+# Testing the project
+## You can test the API, there are two relevant tests, to see them, just run:
+
+```
+npx lerna run test
+```
+
+- This will run test for the API
+
+#### Then you should see the success messages
