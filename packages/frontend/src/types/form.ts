@@ -1,6 +1,6 @@
 export interface DataLocationProps {
-  postCode?: string,
+  zipcode?: string,
   country?:string,
-  city: string,
+  placeName: string,
   state: string
 }

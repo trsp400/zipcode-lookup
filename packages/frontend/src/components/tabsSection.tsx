@@ -1,7 +1,7 @@
 import {useState} from 'react'
-import {Box, Tabs, Tab, Divider } from '@mui/material';
+import {Box, Tabs, Tab, Divider, IconButton, Typography } from '@mui/material';
 
-import { PlaceOutlined } from '@mui/icons-material';
+import { PlaceOutlined, DeleteOutline } from '@mui/icons-material';
 
 import { TabPanelProps, TabsContentProps } from '../types/tabs'
 import { DataLocationProps } from '../types/form'
@@ -11,11 +11,11 @@ import AddressHistoryList from './addressHistoryList';
 
 const tabContent: TabsContentProps[] = [
   {
-    label: 'Addres',
+    label: 'Address',
     iconLabel: <PlaceOutlined />,
   },
   {
-    label: 'Historic',
+    label: 'History',
     iconLabel: <PlaceOutlined />,
   }
 ]
@@ -49,6 +49,10 @@ function a11yProps(index: number) {
 
 export default function TabsSection() {
   const [value, setValue] = useState(0);
+
+  const handleClearLocalStorage = () => {
+    localStorage.removeItem('#postalCodeSearch');
+  }
 
   const [dataLocalyStorage] = useState<DataLocationProps[]>(() => {
     const dataLocaly =  localStorage.getItem("#postalCodeSearch") as string
@@ -94,10 +98,16 @@ export default function TabsSection() {
           <EnterAddress />
         </TabPanel>
         <TabPanel value={value} index={1}>
+          <Box display="flex" flexDirection="row">
+            <Typography variant="h6" sx={{ color: "#8789af" }}>Delete recent searches</Typography> 
+            <IconButton onClick={() => handleClearLocalStorage()} color="error" title='Delete recent searches'>
+              <DeleteOutline />
+            </IconButton>
+          </Box>
             {dataLocalyStorage.map((dataItem, index) => (
-            <AddressHistoryList
-              key={(index * Math.random()).toString()}
-              {...dataItem}
+              <AddressHistoryList
+                key={(index * Math.random()).toString()}
+                {...dataItem}
             />
             ))}
         </TabPanel>
