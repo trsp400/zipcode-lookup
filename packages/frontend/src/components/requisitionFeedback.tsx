@@ -4,7 +4,7 @@ import { RequisitionFeedbackProps } from '../types/requisitionFeedback'
 function RequisitionFeedback({ 
     isErrorRequisition, 
     setIsErrorRequisition,
-    messagem,
+    message,
     typeFeedback,
     durationHideFeedback
   }:RequisitionFeedbackProps) {
@@ -26,7 +26,7 @@ function RequisitionFeedback({
         onClose={handleClose}
         autoHideDuration={durationHideFeedback}
       >
-        <Alert severity={typeFeedback}>{messagem}</Alert>
+        <Alert severity={typeFeedback}>{message}</Alert>
       </Snackbar>
     </div>
   );
