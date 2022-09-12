@@ -1,4 +1,4 @@
-export interface DataLocalityProps {
+export interface DataLocationProps {
   postCode?: string,
   country?:string,
   city: string,

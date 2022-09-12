@@ -1,20 +1,20 @@
 import { Alert, Snackbar } from '@mui/material'
-import { RequisitionFeedbackProps } from '../types/requisitionFeedback'
+import { RequestFeedbackProps } from '../types/requestFeedback'
 
-function RequisitionFeedback({ 
-    isErrorRequisition, 
-    setIsErrorRequisition,
+function RequestFeedback({ 
+    isErrorRequest, 
+    setIsErrorRequest,
     message,
     typeFeedback,
     durationHideFeedback
-  }:RequisitionFeedbackProps) {
+  }:RequestFeedbackProps) {
  
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
 
-    setIsErrorRequisition(false);
+    setIsErrorRequest(false);
   };
 
   
@@ -22,7 +22,7 @@ function RequisitionFeedback({
     <div>
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={isErrorRequisition}
+        open={isErrorRequest}
         onClose={handleClose}
         autoHideDuration={durationHideFeedback}
       >
@@ -33,4 +33,4 @@ function RequisitionFeedback({
 }
 
 
-export default RequisitionFeedback
+export default RequestFeedback

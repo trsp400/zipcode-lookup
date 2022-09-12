@@ -4,7 +4,7 @@ import {Box, Tabs, Tab, Divider } from '@mui/material';
 import { PlaceOutlined } from '@mui/icons-material';
 
 import { TabPanelProps, TabsContentProps } from '../types/tabs'
-import { DataLocalityProps } from '../types/form'
+import { DataLocationProps } from '../types/form'
 
 import EnterAddress from './enterAddress';
 import AddressHistoryList from './addressHistoryList';
@@ -50,14 +50,14 @@ function a11yProps(index: number) {
 export default function TabsSection() {
   const [value, setValue] = useState(0);
 
-  const [dataLocalyStorage] = useState<DataLocalityProps[]>(() => {
+  const [dataLocalyStorage] = useState<DataLocationProps[]>(() => {
     const dataLocaly =  localStorage.getItem("#postalCodeSearch") as string
 
     if(dataLocaly){
       return JSON.parse(dataLocaly)
     }
     
-    return [] as unknown as DataLocalityProps;
+    return [] as unknown as DataLocationProps;
 
   });
 

@@ -1,7 +1,7 @@
 import { Box, Stack } from '@mui/material'
 
 import HeaderTextForm from "./headerTextForm";
-import FormAddres from "./formAddres";
+import FormAddres from "./formAddress";
 
 function EnterAddress(){
   return (

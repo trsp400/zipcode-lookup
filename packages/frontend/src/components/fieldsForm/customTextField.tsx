@@ -2,7 +2,7 @@ import { TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 
-const CustonTextField = styled(TextField)({
+const CustomTextField = styled(TextField)({
   '& label.Mui-focused': {
     color: 'green',
   },
@@ -31,4 +31,4 @@ const CustonTextField = styled(TextField)({
   },
 })
 
-export { CustonTextField }
+export { CustomTextField }

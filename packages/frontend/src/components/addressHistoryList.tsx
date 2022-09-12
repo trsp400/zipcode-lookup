@@ -1,8 +1,8 @@
 import { Box, CardContent,Card, Typography,Grid  } from '@mui/material'
 
-import { DataLocalityProps } from '../types/form'
+import { DataLocationProps } from '../types/form'
 
-function AddressHistoryList({ postCode, country, city, state }: DataLocalityProps){
+function AddressHistoryList({ postCode, country, city, state }: DataLocationProps){
   return (
     <Box width="100%"  sx={{ mx: '2px', transform: 'scale(0.9)'}}>
       <Card variant="elevation" sx={{ bgcolor: "#102027" }} >

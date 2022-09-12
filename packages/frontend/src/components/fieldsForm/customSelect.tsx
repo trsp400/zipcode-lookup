@@ -1,7 +1,7 @@
 import { Select } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-const CustonSelect = styled(Select)({
+const CustomSelect = styled(Select)({
   '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
     borderColor: 'green',
   },
@@ -20,4 +20,4 @@ const CustonSelect = styled(Select)({
   },
 })
 
-export { CustonSelect } 
+export { CustomSelect } 

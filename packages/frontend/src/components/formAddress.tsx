@@ -1,22 +1,22 @@
 import { useState, useCallback } from 'react'
 import { Box, InputLabel, SelectChangeEvent, Button, FormControl, MenuItem } from '@mui/material';
 
-import { CustonSelect } from './fieldsForm/custonSelect'
-import { CustonTextField } from './fieldsForm/custonTextField'
-import RequisitionFeedback from './requisitionFeedback';
+import { CustomSelect } from './fieldsForm/customSelect'
+import { CustomTextField } from './fieldsForm/customTextField'
+import RequestFeedback from './requestFeedback';
 import {dataCountries} from '../data/countriesList'
 import { api } from '../api'
 import { setDataStorage } from '../util/setDataStorage';
 
-import { DataLocalityProps } from '../types/form'
+import { DataLocationProps } from '../types/form'
 
 
 export default function FormAddres() {
 
   const [codeCountry, setCodeCountry] = useState('');
   const [zipCode, setZipCode] = useState('US');
-  const [dataLocality, setDataLocality] = useState<DataLocalityProps>();
-  const [isErrorRequisition, setIsErrorRequisition] = useState(false)
+  const [dataLocality, setDataLocality] = useState<DataLocationProps>();
+  const [isErrorRequest, setIsErrorRequest] = useState(false)
   
   const getAddress = useCallback(() => {
     const params = `${codeCountry}/${zipCode}`
@@ -24,10 +24,8 @@ export default function FormAddres() {
     api.get(params).then(response => {
       const dataAddress  = response.data
 
-      console.log(dataAddress)
-
       setDataLocality(() =>  {
-        const dataLocality: DataLocalityProps = {
+        const dataLocality: DataLocationProps = {
           country: dataAddress["country"],
           postCode: dataAddress["post code"],
           city: dataAddress.places[0]["place name"],
@@ -43,7 +41,7 @@ export default function FormAddres() {
         };
       })
     }).catch(() =>{
-      setIsErrorRequisition(true)
+      setIsErrorRequest(true)
     })
 
 
@@ -84,7 +82,7 @@ export default function FormAddres() {
           }}
         >
           
-          <CustonTextField label="Enter your zip code" variant="outlined" onChange={dataInput => setZipCode(dataInput.target.value)} />
+          <CustomTextField label="Enter your zip code" variant="outlined" onChange={dataInput => setZipCode(dataInput.target.value)} />
           </FormControl>
 
           <FormControl
@@ -95,8 +93,8 @@ export default function FormAddres() {
             width: "100%",
           }}
         >
-            <InputLabel id="demo-simple-select-helper-label" sx={{ color: "#fff" }}>Countrie</InputLabel>
-            <CustonSelect
+            <InputLabel id="demo-simple-select-helper-label" sx={{ color: "#fff" }}>Country</InputLabel>
+            <CustomSelect
               labelId="demo-simple-select-helper-label"
               id="demo-customized-select"
               value={!codeCountry ? 'US' : codeCountry}
@@ -113,7 +111,7 @@ export default function FormAddres() {
                   {itemCountry?.country}
                 </MenuItem>
                 ))}
-            </CustonSelect>
+            </CustomSelect>
             
         </FormControl>
       </Box>
@@ -132,7 +130,7 @@ export default function FormAddres() {
                 >
 
               
-                <CustonTextField 
+                <CustomTextField 
                   id="outlined-basic" 
                   variant="outlined" 
                   label="City"
@@ -140,7 +138,7 @@ export default function FormAddres() {
                   focused={!!dataLocality?.city}
                   sx={{ mb: { xs: 2, md: 0 } }}
                 />
-                <CustonTextField 
+                <CustomTextField 
                   id="outlined-basic" 
                   variant="outlined" 
                   label="State"
@@ -162,10 +160,10 @@ export default function FormAddres() {
           Search
         </Button>
       </Box>
-     <RequisitionFeedback 
+     <RequestFeedback 
       durationHideFeedback={3000}
-      isErrorRequisition={isErrorRequisition}
-      setIsErrorRequisition={setIsErrorRequisition}
+      isErrorRequest={isErrorRequest}
+      setIsErrorRequest={setIsErrorRequest}
       typeFeedback="error"
       message='Address not found'
      />
