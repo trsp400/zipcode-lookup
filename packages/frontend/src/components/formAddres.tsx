@@ -1,88 +1,90 @@
-import { TextField, Box, FormHelperText, MenuItem, InputLabel, Select, SelectChangeEvent, InputBase } from '@mui/material';
-import FormControl, { useFormControl } from '@mui/material/FormControl';
-import { styled } from '@mui/material/styles';
+import { useState, useCallback } from 'react'
+import { Box, InputLabel, SelectChangeEvent, Button, FormControl, MenuItem } from '@mui/material';
 
-import dataCountries from '../data/countriesList.json'
+import { CustonSelect } from './fieldsForm/custonSelect'
+import { CustonTextField } from './fieldsForm/custonTextField'
+import RequisitionFeedback from './requisitionFeedback';
+import {dataCountries} from '../data/countriesList'
+import { api } from '../api'
+import { setDataStorage } from '../util/setDataStorage';
 
-const CustonTextField = styled(TextField)({
-  '& label.Mui-focused': {
-    color: 'green',
-  },
-  '& .MuiInput-underline:after': {
-    borderBottomColor: 'green',
-  },
-  '&.MuiFormControl-root>label': {
-    color: '#8789af',
-  },
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': {
-      borderColor: '#8789af',
-    },
-    '&:hover fieldset': {
-      borderColor: '#8789af',
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: 'green',
-    },
-  },
-})
-
-const BootstrapInput = styled(InputBase)(({ theme }) => ({
-  'label + &': {
-    color: "#8789af",
-    marginTop: theme.spacing(3),
-
-  },
-  '& .MuiInputBase-input': {
-    borderRadius: 4,
-    position: 'relative',
-    border: '1px solid #8789af',
-    fontSize: 16,
-    padding: '16px 26px 15px 12px',
-    transition: theme.transitions.create(['border-color', 'box-shadow']),
-    // Use the system font instead of the default Roboto font.
-  },
-}));
-
-
-const textfieldPerColumn = [ 
-  [
-    { label: "Street" },
-    { label: "Complement" },
-    { label: "City" },
-  ],
-  [
-    { label: "House number" },
-    { label: "District" },
-    { label: "State" },
-  ] 
-]
+import { DataLocalityProps } from '../types/form'
 
 
 export default function FormAddres() {
+
+  const [codeCountry, setCodeCountry] = useState('');
+  const [zipCode, setZipCode] = useState('US');
+  const [dataLocality, setDataLocality] = useState<DataLocalityProps>();
+  const [isErrorRequisition, setIsErrorRequisition] = useState(false)
+  
+  const getAddress = useCallback(() => {
+    const params = `${codeCountry}/${zipCode}`
+
+    api.get(params).then(response => {
+      const dataAddress  = response.data
+
+      console.log(dataAddress)
+
+      setDataLocality(() =>  {
+        const dataLocality: DataLocalityProps = {
+          country: dataAddress["country"],
+          postCode: dataAddress["post code"],
+          city: dataAddress.places[0]["place name"],
+          state: dataAddress.places[0]["state"]
+        }
+
+        console.log(dataAddress)
+        setDataStorage(dataLocality)
+        
+        return {
+          city: dataAddress.places[0]["place name"],
+          state: dataAddress.places[0]["state"]
+        };
+      })
+    }).catch(() =>{
+      setIsErrorRequisition(true)
+    })
+
+
+    
+
+  },[codeCountry, zipCode])
+
+
+  const handleChangeCountry = (event: SelectChangeEvent<unknown>) => {
+    setCodeCountry(event.target.value as string);
+  };
+
+  
   return (
     <Box 
       component="form"
-      sx={{
-        width: "100%",
-      }}
+      display="flex"
+      width="100%"
+      height="auto"
+      flexDirection="column"
+      alignItems="center"
       >
       <Box 
         display="flex"
+        flexDirection={{ xs: "column", md: "row" }}
         component="div"
         width="100%"
-        
        >
         <FormControl
           fullWidth
           component="div"
+
           sx={{
             display: "flex",
             width: "100%",
+            mr: { xs: 0, md: 2 },
+            mb: { xs: 4, md: 0 }
           }}
         >
           
-          <CustonTextField label="Enter your zip code" variant="outlined" />
+          <CustonTextField label="Enter your zip code" variant="outlined" onChange={dataInput => setZipCode(dataInput.target.value)} />
           </FormControl>
 
           <FormControl
@@ -93,82 +95,80 @@ export default function FormAddres() {
             width: "100%",
           }}
         >
-            <InputLabel id="demo-simple-select-helper-label">Countrie</InputLabel>
-            <Select
+            <InputLabel id="demo-simple-select-helper-label" sx={{ color: "#fff" }}>Countrie</InputLabel>
+            <CustonSelect
               labelId="demo-simple-select-helper-label"
               id="demo-customized-select"
-              value={'US'}
-              label="Countrie"
-              input={<BootstrapInput />}
-              // onChange={handleChange}
+              value={!codeCountry ? 'US' : codeCountry}
+              label="Country"
+
+              onChange={handleChangeCountry}
+             
             >
-              {dataCountries.map(countrie => (
-                <MenuItem value={countrie?.code}>{countrie?.name}</MenuItem>
+              {dataCountries.map((itemCountry, index) => (
+                <MenuItem 
+                  key={(index * Math.random()).toString()}
+                  value={itemCountry?.code}
+                >
+                  {itemCountry?.country}
+                </MenuItem>
                 ))}
-            </Select>
+            </CustonSelect>
             
         </FormControl>
       </Box>
-      <Box
-        component="div"
-        display="flex"
-        flexDirection={{ xs: "column", md: "row" }}
-        mt={5}
-        width="100%"
-        sx={{
-          '& > :last-child': { mr: 0 },
-        }}
-        >
+    
 
-        {
-          textfieldPerColumn.map((itensTextField) => (
             <Box 
                 component="div"
                 display="flex"
-                flexDirection="column"
-                mr={2}
+                flexDirection={{ xs: "column", md: "row" }}
+                my={5}
                 width="100%"
                   sx={{
-                    '& .MuiTextField-root': { mb: 2, width: '100%' },
+                    '& .MuiTextField-root': { mr: 2, width: '100%' },
+                    '& .MuiTextField-root:last-child': { mr: 0 }
                   }}
                 >
-            {itensTextField.map(itemTextField => ((
+
               
                 <CustonTextField 
                   id="outlined-basic" 
-                  label={itemTextField.label} 
                   variant="outlined" 
+                  label="City"
+                  value={dataLocality?.city}
+                  focused={!!dataLocality?.city}
+                  sx={{ mb: { xs: 2, md: 0 } }}
                 />
-            )))}
+                <CustonTextField 
+                  id="outlined-basic" 
+                  variant="outlined" 
+                  label="State"
+                  value={dataLocality?.state}
+                  focused={!!dataLocality?.state}
+                />
+
             </Box>
-          ))
-        }
-        {/* <Box 
-          component="div"
-            sx={{
-              display: "flex",
-              width: "100%",
-              flexDirection: "column",
-              bgcolor: "blue"
-            }}
+
+
+      <Box width={{ xs: "100%", md: 1/3}}>
+        <Button 
+          variant="contained" 
+          color="success"
+          fullWidth
+          sx={{ py: 1.5 }}
+          onClick={() => getAddress()}
           >
-          <CustonTextField id="outlined-basic" label="ouse number" variant="outlined" />
-          <CustonTextField id="outlined-basic" label="Complement" variant="outlined" />
-          <CustonTextField id="outlined-basic" label="City" variant="outlined" />
-        </Box> */}
-        {/* <Box 
-          component="div"
-            sx={{
-              display: "flex",
-              width: "100%",
-              flexDirection: "column",
-            }}
-          >
-          <CustonTextField id="outlined-basic" label="House number" variant="outlined" />
-          <CustonTextField id="outlined-basic" label="District" variant="outlined" />
-          <CustonTextField id="outlined-basic" label="State" variant="outlined" />
-        </Box> */}
+          Search
+        </Button>
       </Box>
+     <RequisitionFeedback 
+      durationHideFeedback={3000}
+      isErrorRequisition={isErrorRequisition}
+      setIsErrorRequisition={setIsErrorRequisition}
+      typeFeedback="error"
+      message='Address not found'
+     />
     </Box>
   );
 }

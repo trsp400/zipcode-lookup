@@ -1,25 +1,20 @@
-import { useState } from 'react';
-import Button from '@mui/material/Button';
-import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
+import { Alert, Snackbar } from '@mui/material'
+import { RequisitionFeedbackProps } from '../types/requisitionFeedback'
 
-export interface State extends SnackbarOrigin {
-  open: boolean;
-}
+function RequisitionFeedback({ 
+    isErrorRequisition, 
+    setIsErrorRequisition,
+    messagem,
+    typeFeedback,
+    durationHideFeedback
+  }:RequisitionFeedbackProps) {
+ 
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
 
-export default function PositionedSnackbar() {
-  const [state, setState] = useState<State>({
-    open: false,
-    vertical: 'top',
-    horizontal: 'center',
-  });
-  const { vertical, horizontal, open } = state;
-
-  const handleClick = (newState: SnackbarOrigin) => () => {
-    setState({ open: true, ...newState });
-  };
-
-  const handleClose = () => {
-    setState({ ...state, open: false });
+    setIsErrorRequisition(false);
   };
 
   
@@ -27,10 +22,15 @@ export default function PositionedSnackbar() {
     <div>
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={open}
+        open={isErrorRequisition}
         onClose={handleClose}
-        message="I love snacks"
-      />
+        autoHideDuration={durationHideFeedback}
+      >
+        <Alert severity={typeFeedback}>{messagem}</Alert>
+      </Snackbar>
     </div>
   );
 }
+
+
+export default RequisitionFeedback
