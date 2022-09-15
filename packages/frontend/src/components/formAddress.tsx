@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { Box, InputLabel, SelectChangeEvent, Button, FormControl, MenuItem, CircularProgress } from '@mui/material';
+import { useState, useEffect, useContext } from 'react'
+import { Box, InputLabel, SelectChangeEvent, Button, FormControl, MenuItem, CircularProgress, Snackbar, Alert } from '@mui/material';
 
 import { gql, useLazyQuery } from '@apollo/client';
 
@@ -7,6 +7,7 @@ import { CustomSelect } from './fieldsForm/customSelect'
 import { CustomTextField } from './fieldsForm/customTextField'
 import RequestFeedback from './requestFeedback';
 import {dataCountries} from '../data/countriesList'
+import AddressHistoryList from './addressHistoryList';
 
 const addressQuery = gql`
   query Address($country: String!, $zipcode: String!) {
@@ -28,25 +29,39 @@ export default function FormAddres() {
   const [country, setCountry] = useState('US');
   const [zipcode, setZipcode] = useState('');
   const [address, setAddress] = useState<any>();
-  const [itemsSearched, setItemsSearched] = useState<any>(JSON.parse(localStorage.getItem('#postalCodeSearch') as string) || [])
+  
+  const [addresses, setAddresses] = useState(JSON.parse(localStorage.getItem('#postalCodeSearch') as string) || [])
+  
   const [isErrorRequest, setIsErrorRequest] = useState(false)
   
   const [buttonClicked, setButtonClicked] = useState(false)
 
   const [findAddress, { loading, error, data}] = useLazyQuery(addressQuery);
 
+  const [open, setOpen] = useState(false);
+
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+
   useEffect(() => {    
     if (buttonClicked && data?.findAddress) {
       setAddress(data?.findAddress)
       setButtonClicked(false)
       
-      if (itemsSearched?.length < 5) {
-        setItemsSearched([...itemsSearched, data?.findAddress])
-        localStorage.setItem('#postalCodeSearch', JSON.stringify([...itemsSearched, data?.findAddress]))
+      if (addresses?.length < 5) {
+        setAddresses([...addresses, data?.findAddress])
+        localStorage.setItem('#postalCodeSearch', JSON.stringify([...addresses, data?.findAddress]) as string)
+        setOpen(true)
       }
       
     }
-  }, [buttonClicked, data, itemsSearched])
+  }, [buttonClicked, data])
 
   const handleChangeCountry = (event: SelectChangeEvent<unknown>) => {
     setCountry(event.target.value as string);
@@ -61,6 +76,17 @@ export default function FormAddres() {
       flexDirection="column"
       alignItems="center"
       >
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert 
+          onClose={handleClose} 
+          severity="success" 
+          sx={{ width: '100%' }}
+          elevation={6} 
+          variant="filled"
+        >
+          Address succesfully added to the history!
+        </Alert>
+      </Snackbar>
       <Box 
         display="flex"
         flexDirection={{ xs: "column", md: "row" }}
@@ -197,6 +223,7 @@ export default function FormAddres() {
       typeFeedback="error"
       message='Address not found'
      />
+
     </Box>
   );
 }

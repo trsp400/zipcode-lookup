@@ -1,5 +1,5 @@
-import {useState} from 'react'
-import {Box, Tabs, Tab, Divider, IconButton, Typography } from '@mui/material';
+import {useContext, useState} from 'react'
+import {Box, Tabs, Tab, Divider, IconButton, Typography, Snackbar, Alert } from '@mui/material';
 
 import { PlaceOutlined, DeleteOutline } from '@mui/icons-material';
 
@@ -8,6 +8,7 @@ import { DataLocationProps } from '../types/form'
 
 import EnterAddress from './enterAddress';
 import AddressHistoryList from './addressHistoryList';
+
 
 const tabContent: TabsContentProps[] = [
   {
@@ -49,28 +50,42 @@ function a11yProps(index: number) {
 
 export default function TabsSection() {
   const [value, setValue] = useState(0);
+  
+  const [addresses, setAddresses] = useState(JSON.parse(localStorage.getItem('#postalCodeSearch') as string) || [])
+  const [open, setOpen] = useState(false);
+
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const handleClearLocalStorage = () => {
     localStorage.removeItem('#postalCodeSearch');
+    setAddresses([])
+    setOpen(true)
   }
-
-  const [dataLocalyStorage] = useState<DataLocationProps[]>(() => {
-    const dataLocaly =  localStorage.getItem("#postalCodeSearch") as string
-
-    if(dataLocaly){
-      return JSON.parse(dataLocaly)
-    }
-    
-    return [] as unknown as DataLocationProps;
-
-  });
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+    setAddresses(JSON.parse(localStorage.getItem('#postalCodeSearch') as string) || [])
   };
 
   return (
     <Box sx={{ width: '100%', bgcolor: '#001e3c'}}>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert 
+          onClose={handleClose} 
+          severity="error" 
+          sx={{ width: '100%' }}
+          elevation={6} 
+          variant="filled"
+        >
+          Succesfully cleared search history!
+        </Alert>
+      </Snackbar>
       <Tabs 
         indicatorColor='primary'
         textColor='primary'
@@ -104,7 +119,7 @@ export default function TabsSection() {
               <DeleteOutline />
             </IconButton>
           </Box>
-            {dataLocalyStorage.map((dataItem, index) => (
+            {addresses?.map((dataItem: any, index: number) => (
               <AddressHistoryList
                 key={(index * Math.random()).toString()}
                 {...dataItem}
